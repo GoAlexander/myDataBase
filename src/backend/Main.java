@@ -79,6 +79,40 @@ public class Main {
 		System.out.println("iPhone 6S changed!");
 
 		System.out.println();
+		
+		Product five = new Product("Phone1", 12345, 999999, new GregorianCalendar(2016, 04, 24).getTime());
+		myDB.add(five.getInfo());
+		System.out.println(myDB.getLineNumber());
+		System.out.println(myDB.getHashMapSize());
+		System.out.println(myDB.getHashMapSecondSize());
+
+		System.out.println();
+		
+		Product six = new Product("Phone2", 12345, 999999, new GregorianCalendar(2016, 04, 24).getTime());
+		myDB.add(six.getInfo());
+		System.out.println(myDB.getLineNumber());
+		System.out.println(myDB.getHashMapSize());
+		System.out.println(myDB.getHashMapSecondSize());
+
+		System.out.println();
+		
+		Product seven = new Product("Phone3", 12345, 999999, new GregorianCalendar(2016, 04, 24).getTime());
+		myDB.add(seven.getInfo());
+		System.out.println(myDB.getLineNumber());
+		System.out.println(myDB.getHashMapSize());
+		System.out.println(myDB.getHashMapSecondSize());
+
+		System.out.println();
+		
+		
+		myDB.delete(12345);
+		System.out.println("Not implemented yet!");
+		System.out.println(myDB.getLineNumber());
+		System.out.println(myDB.getHashMapSize());
+		System.out.println(myDB.getHashMapSecondSize());
+
+		System.out.println();
+		
 
 	}
 

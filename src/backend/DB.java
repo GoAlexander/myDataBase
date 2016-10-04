@@ -13,18 +13,35 @@ import java.util.Map;
 
 public class DB {
 
-	private String path;
+	private String path; //path to db.csv
+	private String folder;
+	private String pathHashMap;
+	private String pathHashMapSecond;
+	private String pathLastLineNumber;
+
+	long timeStart;
+	long timeStop;
+
 	private final int columns = 4; // TODO ACHTUNG!!!
 
 	Map<String, Integer> hashmap = new HashMap<String, Integer>();
-	private int lastLineNumber = 1; // TODO I can calculate it!
+	Map<Integer, Integer[]> hashmapSecond = new HashMap<Integer, Integer[]>();
+
+	private int lastLineNumber = 1; // I can calculate it:
 	// http://stackoverflow.com/questions/453018/number-of-lines-in-a-file-in-java
-	// or
 	// http://stackoverflow.com/questions/1277880/how-can-i-get-the-count-of-line-in-a-file-in-an-efficient-way
 
 	// --------------------------------------------------
 	// sets
 	// --------------------------------------------------
+	
+	public void setFolder(String folder) {
+		this.folder = folder;
+		this.path = folder + "/db.csv"; //TODO ACHTUNG! Check ending of folder path! About: ./folder/ or ./folder !!!  
+		this.pathHashMap = folder + "/hashmap.hm";
+		this.pathHashMapSecond = folder + "/hashmapSecond.hm";
+		this.pathLastLineNumber = folder + "/lastLineNumber.txt";
+	}
 
 	public void setPath(String path) {
 		this.path = path;
@@ -38,7 +55,9 @@ public class DB {
 		this.hashmap = hashmap;
 	}
 
-	// TODO second HashMap
+	public void setHashMapSecond(Map<Integer, Integer[]> hashmapSecond) {
+		this.hashmapSecond = hashmapSecond;
+	}
 
 	// --------------------------------------------------
 	// gets
@@ -51,6 +70,10 @@ public class DB {
 	public int getHashMapSize() {
 		return hashmap.size();
 	}
+	
+	public int getHashMapSecondSize() {
+		return hashmapSecond.size();
+	}
 
 	public Map<String, Integer> getHashMap() {
 		return hashmap;
@@ -60,6 +83,19 @@ public class DB {
 	// operations with DB
 	// --------------------------------------------------
 
+	//TODO implement sync of hashmaps!
+	//TODO test it!
+	public String[][] get(Integer key) throws Exception {
+		Integer[] values = hashmapSecond.get(key);
+		
+		String[][] data = new String[hashmapSecond.size()][columns];
+		for (int i = 0; i < values.length; i++) {
+			data[i] = getInfo(values[i]);
+		}
+		
+		return data;
+	}
+	
 	public String[] get(String key) throws Exception {
 		int value = hashmap.get(key);
 
@@ -84,6 +120,7 @@ public class DB {
 	public boolean add(String[] newStr) throws IOException {
 		if (hashmap.containsKey(newStr[0])) // If this company already exists.
 			return false;
+		
 		hashmap.put(newStr[0], lastLineNumber);
 		lastLineNumber++;
 
@@ -106,6 +143,16 @@ public class DB {
 		}
 		return false;
 	}
+	
+	//TODO implement sync of hashmaps!
+	//TODO test it!
+	public boolean delete(Integer key) {
+		if (hashmapSecond.containsKey(key)) {
+			hashmapSecond.remove(key);
+			return true;
+		}
+		return false;
+	}
 
 	public boolean edit(String key, String[] newStr) throws IOException {
 		if (hashmap.containsKey(key)) {
@@ -120,14 +167,27 @@ public class DB {
 	// get all file for jTable
 	// --------------------------------------------------
 
-	public Object[][] getData() throws Exception {
-		Object[][] data = new Object[hashmap.size()][columns];
+	public String[][] getData() throws Exception {
+		String[][] data = new String[hashmap.size()][columns];
 		int i = 0;
 		for (int value : hashmap.values()) {
 			data[i] = getInfo(value);
 			i++;
 		}
 		return data;
+	}
+	
+	
+	// --------------------------------------------------
+	// timers
+	// --------------------------------------------------
+	public void timerStart() {
+		timeStart = System.currentTimeMillis();
+	}
+	
+	public long timerStop() {
+		timeStop = System.currentTimeMillis();
+		return timeStop - timeStart;
 	}
 
 }
