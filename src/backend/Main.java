@@ -26,7 +26,7 @@ public class Main {
 
 		System.out.println();
 
-		String[] str3 = myDB.get("iPhone 5S");
+		String[] str3 = myDB.get("iPhone 6S");
 		for (int i = 0; i < str3.length; i++) {
 			System.out.println(str3[i]);
 		}

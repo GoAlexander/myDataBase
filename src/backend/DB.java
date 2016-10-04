@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class DB {
 
-	private String path; //path to db.csv
+	private String path; // path to db.csv
 	private String folder;
 	private String pathHashMap;
 	private String pathHashMapSecond;
@@ -34,10 +34,10 @@ public class DB {
 	// --------------------------------------------------
 	// sets
 	// --------------------------------------------------
-	
+
 	public void setFolder(String folder) {
 		this.folder = folder;
-		this.path = folder + "/db.csv"; //TODO ACHTUNG! Check ending of folder path! About: ./folder/ or ./folder !!!  
+		this.path = folder + "/db.csv";
 		this.pathHashMap = folder + "/hashmap.hm";
 		this.pathHashMapSecond = folder + "/hashmapSecond.hm";
 		this.pathLastLineNumber = folder + "/lastLineNumber.txt";
@@ -47,6 +47,26 @@ public class DB {
 		//hashmapSecond =
 		//lastLineNumber =
 				
+	}
+
+	public String getFolder() {
+		return folder;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public String getPathHashMap() {
+		return pathHashMap;
+	}
+
+	public String getPathHashMapSecond() {
+		return pathHashMapSecond;
+	}
+
+	public String getPathLastLineNumber() {
+		return pathLastLineNumber;
 	}
 
 	public void setPath(String path) {
@@ -76,7 +96,7 @@ public class DB {
 	public int getHashMapSize() {
 		return hashmap.size();
 	}
-	
+
 	public int getHashMapSecondSize() {
 		return hashmapSecond.size();
 	}
@@ -89,22 +109,21 @@ public class DB {
 	// operations with DB
 	// --------------------------------------------------
 
-	//TODO implement sync of hashmaps!
-	//TODO test it!
+	// TODO implement sync of hashmaps!
+	// TODO test it!
 	public String[][] get(Integer key) throws Exception {
 		Integer[] values = hashmapSecond.get(key);
-		
+
 		String[][] data = new String[hashmapSecond.size()][columns];
 		for (int i = 0; i < values.length; i++) {
 			data[i] = getInfo(values[i]);
 		}
-		
+
 		return data;
 	}
-	
+
 	public String[] get(String key) throws Exception {
 		int value = hashmap.get(key);
-
 		return getInfo(value);
 	}
 
@@ -115,7 +134,9 @@ public class DB {
 		BufferedReader in = new BufferedReader(new FileReader(file.getAbsoluteFile()));
 		LineNumberReader lnr = new LineNumberReader(in);
 
-		String line = lnr.readLine();
+		String line = new String();
+		for (int i = 0; i < lineNumber; i++)
+			line = lnr.readLine();
 		in.close();
 		lnr.close();
 
@@ -126,7 +147,7 @@ public class DB {
 	public boolean add(String[] newStr) throws IOException {
 		if (hashmap.containsKey(newStr[0])) // If this company already exists.
 			return false;
-		
+
 		hashmap.put(newStr[0], lastLineNumber);
 		lastLineNumber++;
 
@@ -149,9 +170,8 @@ public class DB {
 		}
 		return false;
 	}
-	
-	//TODO implement sync of hashmaps!
-	//TODO test it!
+
+	// TODO implement sync of hashmaps!
 	public boolean delete(Integer key) {
 		if (hashmapSecond.containsKey(key)) {
 			hashmapSecond.remove(key);
@@ -182,8 +202,7 @@ public class DB {
 		}
 		return data;
 	}
-	
-	
+
 	// --------------------------------------------------
 	// timers
 	// --------------------------------------------------
