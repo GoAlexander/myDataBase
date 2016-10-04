@@ -12,33 +12,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DB {
-	// open DB -> GUI (������� ����� setPath(String))
-	// create DB -> GUI (������ ������� ����� ���� � ����������� � ���� �����
-	// path)
-	// delete DB -> GUI (������� ���� � ��������� path = null;)
-	// save DB
-
-	// add new element (check unique key)
-	// delete (by key or 1 value)
-	// search by key or 1 value
-	// edit ->
-	// backup of file !!! -> GUI (copy current file and change name of new file
-	// and ...)
-	// restoring from backup file
-	// export in *.xlsx - > GUI (throws jTable)
-	// + timers to analyze
-
-	// use HashMap or array or unique elements
 
 	private String path;
-	// TODO something
-	private final int columns = 4;
+	private final int columns = 4; // TODO ACHTUNG!!!
 
 	Map<String, Integer> hashmap = new HashMap<String, Integer>();
 	private int lastLineNumber = 1; // TODO I can calculate it!
-									// http://stackoverflow.com/questions/453018/number-of-lines-in-a-file-in-java
+	// http://stackoverflow.com/questions/453018/number-of-lines-in-a-file-in-java
 	// or
 	// http://stackoverflow.com/questions/1277880/how-can-i-get-the-count-of-line-in-a-file-in-an-efficient-way
+
+	// --------------------------------------------------
+	// sets
+	// --------------------------------------------------
 
 	public void setPath(String path) {
 		this.path = path;
@@ -48,12 +34,14 @@ public class DB {
 		this.lastLineNumber = lastLineNumber;
 	}
 
-	public void setHashMap(Map<String, Integer> hashmap) { // TODO ok?
+	public void setHashMap(Map<String, Integer> hashmap) {
 		this.hashmap = hashmap;
 	}
 
 	// TODO second HashMap
 
+	// --------------------------------------------------
+	// gets
 	// --------------------------------------------------
 
 	public int getLineNumber() {
@@ -68,6 +56,8 @@ public class DB {
 		return hashmap;
 	}
 
+	// --------------------------------------------------
+	// operations with DB
 	// --------------------------------------------------
 
 	public String[] get(String key) throws Exception {
@@ -126,11 +116,15 @@ public class DB {
 		return false;
 	}
 
+	// --------------------------------------------------
+	// get all file for jTable
+	// --------------------------------------------------
+
 	public Object[][] getData() throws Exception {
 		Object[][] data = new Object[hashmap.size()][columns];
 		int i = 0;
 		for (int value : hashmap.values()) {
-			data[i]=getInfo(value);
+			data[i] = getInfo(value);
 			i++;
 		}
 		return data;
