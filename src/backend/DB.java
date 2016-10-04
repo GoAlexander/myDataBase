@@ -41,6 +41,12 @@ public class DB {
 		this.pathHashMap = folder + "/hashmap.hm";
 		this.pathHashMapSecond = folder + "/hashmapSecond.hm";
 		this.pathLastLineNumber = folder + "/lastLineNumber.txt";
+		
+		//TODO open DB !!!
+		//hashmap =
+		//hashmapSecond =
+		//lastLineNumber =
+				
 	}
 
 	public void setPath(String path) {
@@ -184,7 +190,7 @@ public class DB {
 	public void timerStart() {
 		timeStart = System.currentTimeMillis();
 	}
-	
+
 	public long timerStop() {
 		timeStop = System.currentTimeMillis();
 		return timeStop - timeStart;
