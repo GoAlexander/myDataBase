@@ -24,10 +24,10 @@ public class GUI extends JFrame {
 	private GUIModel theAppModel = new GUIModel();
 	private static final long serialVersionUID = 1L;
 	private JButton insertButton, deleteByNameButton, findByNameButton, btnSaveDatabase, btnLoadDatabase,
-			btnDeleteDatabase, editButton, deleteByQuantityButton, findByQuantityButton, btnNewDatabase,
-			createBackupButton, loadBackupButton;
+			btnDeleteDatabase, editButton, deleteByDateButton, findByDateButton, btnNewDatabase, createBackupButton,
+			loadBackupButton;
 	private DB myDB = new DB();
-	private String[] columnNames = { "Name", "Quantity", "Price (roubles)", "Order date" };
+	private String[] columnNames = { "Name", "Order date", "Price (roubles)", "Quantity" };
 
 	private Component buildGUI() {
 
@@ -84,8 +84,13 @@ public class GUI extends JFrame {
 
 				if (chooser.showSaveDialog(btnSaveDatabase) == JFileChooser.APPROVE_OPTION) {
 					String folder = chooser.getSelectedFile().toString();
-					// TODO write
-					// theAppModel.write(folder);
+					try {
+						myDB.writeToFolder(folder);
+						return;
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(null, "Can`t save this database");
+						return;
+					}
 				}
 			}
 		});
@@ -100,11 +105,11 @@ public class GUI extends JFrame {
 				fileChooser.setAcceptAllFileFilterUsed(false);
 				try {
 					if (fileChooser.showOpenDialog(btnLoadDatabase) == JFileChooser.APPROVE_OPTION) {
-						myDB.setFolder(fileChooser.getSelectedFile().toString());
+						myDB.openFromFolder(fileChooser.getSelectedFile().toString());
 						theAppModel.setDataVector(myDB.getData(), columnNames);
 					}
 				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(null, "Can`t load this file");
+					JOptionPane.showMessageDialog(null, "Can`t load this database");
 				}
 			}
 		});
@@ -115,19 +120,24 @@ public class GUI extends JFrame {
 				int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this database?",
 						"Delete", JOptionPane.YES_NO_OPTION);
 				if (reply == JOptionPane.YES_OPTION) {
-					File file = new File(myDB.getFolder());
-					if (!file.exists()) {
-						JOptionPane.showMessageDialog(null, "Can`t delete this file");
-						return;
+					try {
+						File file = new File(myDB.getFolder());
+						if (!file.exists()) {
+							JOptionPane.showMessageDialog(null, "Can`t delete this database");
+							return;
+						}
+						if (file.isDirectory()) {
+							for (File f : file.listFiles())
+								f.delete();
+							file.delete();
+						} else {
+							file.delete();
+						}
+						JOptionPane.showMessageDialog(null, "Deletion successful");
+						myDB.setFolder(null);
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(null, "Can`t delete this database");
 					}
-					if (file.isDirectory()) {
-						for (File f : file.listFiles())
-							f.delete();
-						file.delete();
-					} else {
-						file.delete();
-					}
-					JOptionPane.showMessageDialog(null, "Deletion successful");
 				}
 				if (reply == JOptionPane.NO_OPTION) {
 				}
@@ -163,17 +173,17 @@ public class GUI extends JFrame {
 			}
 		});
 
-		findByQuantityButton = new JButton("Find by quantity");
-		findByQuantityButton.addActionListener(new ActionListener() {
+		findByDateButton = new JButton("Find by date");
+		findByDateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				QuantityWindow quantityWindow = new QuantityWindow();
-				quantityWindow.setVisible(true);
+				DateWindow dateWindow = new DateWindow();
+				dateWindow.setVisible(true);
 				// wait to cancel the window
-				quantityWindow.addWindowListener(new WindowAdapter() {
+				dateWindow.addWindowListener(new WindowAdapter() {
 					@Override
 					public void windowClosed(WindowEvent e) {
-						int quantity = quantityWindow.getSelectedQuantity();
-						if (quantity != -1) {
+						String date = dateWindow.getSelectedDate();
+						if (!date.isEmpty()) {
 
 						}
 					}
@@ -208,17 +218,17 @@ public class GUI extends JFrame {
 			}
 		});
 
-		deleteByQuantityButton = new JButton("Delete by quantity");
-		deleteByQuantityButton.addActionListener(new ActionListener() {
+		deleteByDateButton = new JButton("Delete by date");
+		deleteByDateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				QuantityWindow quantityWindow = new QuantityWindow();
-				quantityWindow.setVisible(true);
+				DateWindow dateWindow = new DateWindow();
+				dateWindow.setVisible(true);
 				// wait to cancel the window
-				quantityWindow.addWindowListener(new WindowAdapter() {
+				dateWindow.addWindowListener(new WindowAdapter() {
 					@Override
 					public void windowClosed(WindowEvent e) {
-						int quantity = quantityWindow.getSelectedQuantity();
-						if (quantity != -1) {
+						String date = dateWindow.getSelectedDate();
+						if (!date.isEmpty()) {
 
 						}
 					}
@@ -240,9 +250,8 @@ public class GUI extends JFrame {
 						String[] newProduct = insertWindow.getNewProduct();
 						if (!newProduct[0].equals("-1")) {
 							try {
-								if (myDB.add(newProduct) == false)
-									JOptionPane.showMessageDialog(null,
-											"The name " + newProduct[0] + " is already taken!");
+								if (!myDB.add(newProduct))
+									JOptionPane.showMessageDialog(null, "Addition error");
 								else
 									theAppModel.setDataVector(myDB.getData(), columnNames);
 							} catch (Exception e1) {
@@ -294,9 +303,9 @@ public class GUI extends JFrame {
 		panel2.add(insertButton);
 		panel2.add(editButton);
 		panel2.add(deleteByNameButton);
-		panel2.add(deleteByQuantityButton);
+		panel2.add(deleteByDateButton);
 		panel2.add(findByNameButton);
-		panel2.add(findByQuantityButton);
+		panel2.add(findByDateButton);
 
 		JPanel panel5 = new JPanel();
 		panel5.setLayout(new GridLayout(0, 2, 1, 0));

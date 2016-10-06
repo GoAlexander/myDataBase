@@ -57,29 +57,29 @@ public class InsertWindow extends JFrame {
 		lblName.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_1.add(lblName);
 
-		lblQuantity = new JLabel("Quantity");
-		lblQuantity.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_1.add(lblQuantity);
+		lblDate = new JLabel("Date");
+		lblDate.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_1.add(lblDate);
 
 		lblPrice = new JLabel("Price");
 		lblPrice.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_1.add(lblPrice);
 
-		lblDate = new JLabel("Date");
-		lblDate.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_1.add(lblDate);
+		lblQuantity = new JLabel("Quantity");
+		lblQuantity.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_1.add(lblQuantity);
 
 		tfName = new JTextField("");
 		panel_1.add(tfName);
 
-		tfQuantity = new JTextField("");
-		panel_1.add(tfQuantity);
+		tfDate = new JTextField("");
+		panel_1.add(tfDate);
 
 		tfPrice = new JTextField("");
 		panel_1.add(tfPrice);
 
-		tfDate = new JTextField("");
-		panel_1.add(tfDate);
+		tfQuantity = new JTextField("");
+		panel_1.add(tfQuantity);
 
 		btnOk = new JButton("Ok");
 		btnOk.addActionListener(new ActionListener() {
@@ -99,9 +99,9 @@ public class InsertWindow extends JFrame {
 					return;
 				} else {
 					newProduct[0] = tfName.getText();
-					newProduct[1] = tfQuantity.getText();
+					newProduct[1] = tfDate.getText();
 					newProduct[2] = tfPrice.getText();
-					newProduct[3] = tfDate.getText();
+					newProduct[3] = tfQuantity.getText();
 					dispose();
 				}
 			}

@@ -12,14 +12,14 @@ public class Main {
 		myDB.setPath("./db.csv");
 		myDB.setLastLineNumber(1);
 
-		Product one = new Product("iPhone 5S", 12, 52989, new GregorianCalendar(2016, 12, 31).getTime());
+		Product one = new Product("iPhone 5S", new GregorianCalendar(2016, 12, 31).getTime(), 52989, 12);
 		myDB.add(one.getInfo());
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
 
 		System.out.println();
 
-		Product two = new Product("iPhone 6S", 7, 39539.89, new GregorianCalendar(2016, 04, 24).getTime());
+		Product two = new Product("iPhone 6S", new GregorianCalendar(2016, 04, 24).getTime(), 39539.89, 7);
 		myDB.add(two.getInfo());
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
@@ -51,7 +51,7 @@ public class Main {
 
 		System.out.println();
 
-		Product three = new Product("Samsung S7", 2, 49990.79, new GregorianCalendar(2014, 6, 28).getTime());
+		Product three = new Product("Samsung S7", new GregorianCalendar(2014, 6, 28).getTime(), 49990.79, 2);
 		myDB.add(three.getInfo());
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
@@ -72,39 +72,38 @@ public class Main {
 
 		System.out.println();
 
-		Product four = new Product("iPhone 6S", 999, 999999, new GregorianCalendar(2016, 04, 24).getTime());
+		Product four = new Product("iPhone 6S", new GregorianCalendar(2016, 04, 24).getTime(), 999, 999999);
 		myDB.edit("iPhone 6S", four.getInfo());
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
 		System.out.println("iPhone 6S changed!");
 
 		System.out.println();
-		
-		Product five = new Product("Phone1", 12345, 999999, new GregorianCalendar(2016, 04, 24).getTime());
+
+		Product five = new Product("Phone1", new GregorianCalendar(2016, 04, 24).getTime(), 12345, 999999);
 		myDB.add(five.getInfo());
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
 		System.out.println(myDB.getHashMapSecondSize());
 
 		System.out.println();
-		
-		Product six = new Product("Phone2", 12345, 999999, new GregorianCalendar(2016, 04, 24).getTime());
+
+		Product six = new Product("Phone2", new GregorianCalendar(2016, 04, 24).getTime(), 12345, 999999);
 		myDB.add(six.getInfo());
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
 		System.out.println(myDB.getHashMapSecondSize());
 
 		System.out.println();
-		
-		Product seven = new Product("Phone3", 12345, 999999, new GregorianCalendar(2016, 04, 24).getTime());
+
+		Product seven = new Product("Phone3", new GregorianCalendar(2016, 04, 24).getTime(), 12345, 999999);
 		myDB.add(seven.getInfo());
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
 		System.out.println(myDB.getHashMapSecondSize());
 
 		System.out.println();
-		
-		
+
 		myDB.delete(12345);
 		System.out.println("Not implemented yet!");
 		System.out.println(myDB.getLineNumber());
@@ -112,7 +111,6 @@ public class Main {
 		System.out.println(myDB.getHashMapSecondSize());
 
 		System.out.println();
-		
 
 	}
 

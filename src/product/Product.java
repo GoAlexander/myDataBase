@@ -11,7 +11,7 @@ public class Product {
 	private Date date;
 	private DateFormat dateFormat = new SimpleDateFormat("dd-MM-y");
 
-	public Product(String name, int quantity, double price, Date date) {
+	public Product(String name, Date date, double price, int quantity) {
 		this.name = name;
 		this.quantity = quantity;
 		this.price = price;
@@ -19,7 +19,7 @@ public class Product {
 	}
 
 	public String[] getInfo() {
-		return new String[] { name, quantity.toString(), price.toString(), dateFormat.format(date) };
+		return new String[] { name, dateFormat.format(date), price.toString(), quantity.toString() };
 	}
 
 	public String getName() {

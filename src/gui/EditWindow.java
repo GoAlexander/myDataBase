@@ -9,9 +9,9 @@ public class EditWindow extends InsertWindow {
 		lblAddNewProduct.setText("Edit this product:");
 		tfName.setEditable(false);
 		tfName.setText(info[0]);
-		tfQuantity.setText(info[1]);
+		tfDate.setText(info[1]);
 		tfPrice.setText(info[2]);
-		tfDate.setText(info[3]);
+		tfQuantity.setText(info[3]);
 	}
 
 }

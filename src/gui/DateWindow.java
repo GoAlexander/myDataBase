@@ -11,22 +11,25 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.awt.event.ActionEvent;
 
-public class QuantityWindow extends JFrame {
+public class DateWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel panel;
-	private JLabel lblQuantity;
-	private JTextField textQuantityField;
+	private JLabel lblDate;
+	private JTextField textDateField;
 	private JButton btnOk;
-	private int quantity = -1;
+	private String date = new String("");
+	private DateFormat dateFormat = new SimpleDateFormat("dd-MM-y");
 
-	public int getSelectedQuantity() {
-		return quantity;
+	public String getSelectedDate() {
+		return date;
 	}
 
-	public QuantityWindow() {
+	public DateWindow() {
 
 		setBounds(40, 40, 225, 90);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -34,34 +37,35 @@ public class QuantityWindow extends JFrame {
 		panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.CENTER);
 
-		lblQuantity = new JLabel("Quantity");
+		lblDate = new JLabel("Order date");
 
-		textQuantityField = new JTextField();
-		textQuantityField.setColumns(10);
+		textDateField = new JTextField();
+		textDateField.setColumns(10);
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup().addContainerGap()
-						.addComponent(lblQuantity, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblDate, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(textQuantityField, GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)));
-		gl_panel.setVerticalGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup()
-						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(textQuantityField, GroupLayout.PREFERRED_SIZE, 24,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblQuantity))
-						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+						.addComponent(textDateField, GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)));
+		gl_panel.setVerticalGroup(
+				gl_panel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel.createSequentialGroup()
+								.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+										.addComponent(textDateField, GroupLayout.PREFERRED_SIZE, 24,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblDate))
+								.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 		panel.setLayout(gl_panel);
 
 		btnOk = new JButton("Ok");
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String s = textQuantityField.getText();
-				if (!s.matches("[0-9]+")) {
+				String s = textDateField.getText();
+				if (!s.matches("^\\d\\d-\\d\\d-\\d\\d\\d\\d$")) {
 					JOptionPane.showMessageDialog(null, "Wrong format!");
 					return;
 				} else {
-					quantity = Integer.parseInt(s);
+					date = dateFormat.format(s);
 					dispose();
 				}
 			}
