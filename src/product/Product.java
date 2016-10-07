@@ -1,6 +1,7 @@
 package product;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -19,7 +20,7 @@ public class Product {
 	}
 
 	public String[] getInfo() {
-		return new String[] { name, dateFormat.format(date), price.toString(), quantity.toString() };
+		return new String[] { name, dateFormat.format(date), new DecimalFormat("#0.0000").format(price), quantity.toString() };
 	}
 
 	public String getName() {
@@ -52,6 +53,11 @@ public class Product {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	@Override
+	public String toString() {
+		return name + ";" + dateFormat.format(date) + ";" + new DecimalFormat("#0.0000").format(price) + ";" + quantity.toString();
 	}
 
 }

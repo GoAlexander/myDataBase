@@ -12,8 +12,16 @@ import java.io.LineNumberReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 public class DB {
 
@@ -272,6 +280,71 @@ public class DB {
 		fis.close();
 
 		setFolder(folder);
+	}
+
+	public void zip(Path folder, Path zipFilePath) throws IOException {
+		try (FileOutputStream fos = new FileOutputStream(zipFilePath.toFile());
+				ZipOutputStream zos = new ZipOutputStream(fos)) {
+			Files.walkFileTree(folder, new SimpleFileVisitor<Path>() {
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+					zos.putNextEntry(new ZipEntry(folder.relativize(file).toString()));
+					Files.copy(file, zos);
+					zos.closeEntry();
+					return FileVisitResult.CONTINUE;
+				}
+
+				public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+					zos.putNextEntry(new ZipEntry(folder.relativize(dir).toString() + "/"));
+					zos.closeEntry();
+					return FileVisitResult.CONTINUE;
+				}
+			});
+		}
+	}
+
+	public void unzip(String destinationFolder, String zipFile) throws IOException {
+		File directory = new File(destinationFolder);
+		if (!directory.exists())
+			directory.mkdirs();
+
+		byte[] buffer = new byte[2048];
+
+		FileInputStream fInput = new FileInputStream(zipFile);
+		ZipInputStream zipInput = new ZipInputStream(fInput);
+		ZipEntry entry = zipInput.getNextEntry();
+
+		while (entry != null) {
+			String entryName = entry.getName();
+			File file = new File(destinationFolder + File.separator + entryName);
+			System.out.println("Unzip file " + entryName + " to " + file.getAbsolutePath());
+
+			// create the directories of the zip directory
+			if (entry.isDirectory()) {
+				File newDir = new File(file.getAbsolutePath());
+				if (!newDir.exists()) {
+					boolean success = newDir.mkdirs();
+					if (success == false) {
+						System.out.println("Problem creating Folder");
+					}
+				}
+			} else {
+				FileOutputStream fOutput = new FileOutputStream(file);
+				int count = 0;
+				while ((count = zipInput.read(buffer)) > 0) {
+					// write 'count' bytes to the file output stream
+					fOutput.write(buffer, 0, count);
+				}
+				fOutput.close();
+			}
+			zipInput.closeEntry();
+			entry = zipInput.getNextEntry();
+		}
+
+		// close the last ZipEntry
+		zipInput.closeEntry();
+		zipInput.close();
+		fInput.close();
+
 	}
 
 }

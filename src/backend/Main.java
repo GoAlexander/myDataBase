@@ -1,5 +1,6 @@
 package backend;
 
+//import java.io.File;
 import java.util.GregorianCalendar;
 
 import product.Product;
@@ -8,7 +9,15 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 
+
 		DB myDB = new DB();
+		/*
+		 * myDB.zip(new File("C:/Users/aserg/Documents/new").toPath(), new
+		 * File("C:/Users/aserg/Documents/test.backup").toPath());
+		 * myDB.unzip("C:/Users/aserg/Documents/test",
+		 * "C:/Users/aserg/Documents/test.backup");
+		 */
+
 		myDB.setPath("./db.csv");
 		myDB.setLastLineNumber(1);
 

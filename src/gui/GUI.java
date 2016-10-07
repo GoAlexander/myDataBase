@@ -295,8 +295,47 @@ public class GUI extends JFrame {
 		});
 
 		createBackupButton = new JButton("Create backup");
+		createBackupButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setCurrentDirectory(new java.io.File("."));
+				chooser.setDialogTitle("Select destination");
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				chooser.setAcceptAllFileFilterUsed(false);
+
+				if (chooser.showSaveDialog(createBackupButton) == JFileChooser.APPROVE_OPTION) {
+					String folder = chooser.getSelectedFile().toString();
+					try {
+						myDB.zip(new File(myDB.getFolder()).toPath(), new File(folder + "/db.backup").toPath());
+						return;
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(null, "Can`t create backup for this database");
+						return;
+					}
+				}
+			}
+		});
 
 		loadBackupButton = new JButton("Load backup");
+		loadBackupButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setCurrentDirectory(new java.io.File("."));
+				fileChooser.setDialogTitle("Select a backup");
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				try {
+					if (fileChooser.showOpenDialog(loadBackupButton) == JFileChooser.APPROVE_OPTION) {
+						// TODO where to save zips?
+						myDB.unzip("C:/db", fileChooser.getSelectedFile().toString());
+						myDB.openFromFolder("C:/db");
+						theAppModel.setDataVector(myDB.getData(), columnNames);
+						
+					}
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Can`t load this backup");
+				}
+			}
+		});
 
 		JPanel panel2 = new JPanel();
 		panel2.setLayout(new GridLayout(0, 6, 1, 0));
