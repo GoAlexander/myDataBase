@@ -21,21 +21,33 @@ public class Main {
 		myDB.setPath("./db.csv");
 		myDB.setLastLineNumber(1);
 
-		Product one = new Product("iPhone 5S", new GregorianCalendar(2016, 12, 31).getTime(), 52989, 12);
+		//Product one = new Product("iPhone 5S           ", new GregorianCalendar(2016, 12, 31).getTime(), 52989, 12);
+		Product one = new Product("iPhone 5S", new GregorianCalendar(2016, 12, 31).getTime(), 12.0000, 123);
 		myDB.add(one.getInfo());
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
 
 		System.out.println();
 
-		Product two = new Product("iPhone 6S", new GregorianCalendar(2016, 04, 24).getTime(), 39539.89, 7);
+		//Product two = new Product("iPhone 6S           ", new GregorianCalendar(2016, 04, 24).getTime(), 39539.89, 7);
+		Product two = new Product("iPhone 6S", new GregorianCalendar(2016, 04, 24).getTime(), 1.0000, 1);
 		myDB.add(two.getInfo());
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
 
-		System.out.println();
+		System.out.println();		
 
 		String[] str3 = myDB.get("iPhone 6S");
+		for (int i = 0; i < str3.length; i++) {
+			System.out.println(str3[i]);
+		}
+		
+		str3 = myDB.get("iPhone 5S");
+		for (int i = 0; i < str3.length; i++) {
+			System.out.println(str3[i]);
+		}
+		
+		str3 = myDB.get("iPhone 6S");
 		for (int i = 0; i < str3.length; i++) {
 			System.out.println(str3[i]);
 		}

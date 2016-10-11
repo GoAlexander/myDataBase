@@ -1,17 +1,15 @@
 package backend;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.LineNumberReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.io.RandomAccessFile;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,6 +33,9 @@ public class DB {
 	long timeStop;
 
 	private final int columns = 4; // TODO ACHTUNG!!!
+	
+	// name, date, price, quantity lengths
+	private final int[] fieldsLength = {20, 10, 10, 7}; // TODO ACHTUNG!!!
 
 	Map<String, Integer> hashmap = new HashMap<String, Integer>();
 	Map<Integer, Integer[]> hashmapSecond = new HashMap<Integer, Integer[]>();
@@ -129,23 +130,20 @@ public class DB {
 	}
 
 	public String[] get(String key) throws Exception {
-		int value = hashmap.get(key);
-		return getInfo(value);
+		return getInfo( hashmap.get(key) );
 	}
 
 	private String[] getInfo(int lineNumber) throws Exception {
 		File file = new File(path);
 		String[] object;
+		
+		RandomAccessFile raf = new RandomAccessFile(file.getAbsoluteFile(), "r");
+		raf.seek( (50*(lineNumber-1)) + 1); //TODO Highly important! Test with first, middle and end lines!!!
+		
+		String line = raf.readLine();
+		raf.close();
 
-		BufferedReader in = new BufferedReader(new FileReader(file.getAbsoluteFile()));
-		LineNumberReader lnr = new LineNumberReader(in);
-
-		String line = new String();
-		for (int i = 0; i < lineNumber; i++)
-			line = lnr.readLine();
-		in.close();
-		lnr.close();
-
+		line = line.replace("_","");
 		object = line.split(";");
 		return object;
 	}
@@ -156,6 +154,10 @@ public class DB {
 
 		hashmap.put(newStr[0], lastLineNumber);
 		lastLineNumber++;
+		
+		for (int i = 0; i < newStr.length; i++) {
+			newStr[i] = occupySpace(newStr[i], fieldsLength[i]);
+		}
 
 		try (FileWriter fw = new FileWriter(path, true);
 				BufferedWriter bw = new BufferedWriter(fw);
@@ -175,6 +177,13 @@ public class DB {
 			return true;
 		}
 		return false;
+	}
+	
+	private String occupySpace(String newStr, int length) { //TODO Rewrite? Make more abstract? 
+		while (newStr.length() != length) {
+			newStr += "_";
+		}
+		return newStr;
 	}
 
 	// TODO implement sync of hashmaps!
@@ -232,6 +241,10 @@ public class DB {
 		oos.close();
 		fos.close();
 	}
+	
+	// --------------------------------------------------
+	// Write + open + backup
+	// --------------------------------------------------
 
 	public void writeToFolder(String folder) throws IOException {
 		// write db.csv
@@ -346,5 +359,5 @@ public class DB {
 		fInput.close();
 
 	}
-
+	
 }
