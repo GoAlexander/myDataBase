@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -38,7 +39,7 @@ public class DB {
 	private final int[] fieldsLength = {20, 10, 10, 7}; // TODO ACHTUNG!!!
 
 	Map<String, Integer> hashmap = new HashMap<String, Integer>();
-	Map<Integer, Integer[]> hashmapSecond = new HashMap<Integer, Integer[]>();
+	Map<String, ArrayList<Integer>> hashmapSecond = new HashMap<String, ArrayList<Integer>>();
 
 	private int lastLineNumber = 1; // I can calculate it:
 	// http://stackoverflow.com/questions/453018/number-of-lines-in-a-file-in-java
@@ -88,7 +89,7 @@ public class DB {
 		this.hashmap = hashmap;
 	}
 
-	public void setHashMapSecond(Map<Integer, Integer[]> hashmapSecond) {
+	public void setHashMapSecond(Map<String, ArrayList<Integer>> hashmapSecond) {
 		this.hashmapSecond = hashmapSecond;
 	}
 
@@ -111,19 +112,21 @@ public class DB {
 	public Map<String, Integer> getHashMap() {
 		return hashmap;
 	}
+	
+	public Map<String, ArrayList<Integer>> getHashMapSecond() {
+		return hashmapSecond;
+	}
 
 	// --------------------------------------------------
 	// operations with DB
 	// --------------------------------------------------
 
-	// TODO implement sync of hashmaps!
-	// TODO test it!
-	public String[][] get(Integer key) throws Exception {
-		Integer[] values = hashmapSecond.get(key);
+	public String[][] getBySecondField(String key) throws Exception {
+		ArrayList<Integer> values = hashmapSecond.get(key);
 
 		String[][] data = new String[hashmapSecond.size()][columns];
-		for (int i = 0; i < values.length; i++) {
-			data[i] = getInfo(values[i]);
+		for (int i = 0; i < values.size(); i++) {
+			data[i] = getInfo(values.get(i));
 		}
 
 		return data;
@@ -138,7 +141,13 @@ public class DB {
 		String[] object;
 		
 		RandomAccessFile raf = new RandomAccessFile(file.getAbsoluteFile(), "r");
-		raf.seek( (50*(lineNumber-1)) + 1); //TODO Highly important! Test with first, middle and end lines!!!
+		
+		if ((lineNumber-1) == 0) { //TODO Highly important! Test with first, middle and end lines!!!
+			raf.seek( 0 );
+		}
+		else {
+			raf.seek( (50*(lineNumber-1)) + (lineNumber-1) );
+		}
 		
 		String line = raf.readLine();
 		raf.close();
@@ -152,9 +161,21 @@ public class DB {
 		if (hashmap.containsKey(newStr[0])) // If this company already exists.
 			return false;
 
-		hashmap.put(newStr[0], lastLineNumber);
-		lastLineNumber++;
+		hashmap.put(newStr[0], lastLineNumber); // put in 1st hashMap
 		
+		// put in 2nd hashMap
+		if (hashmapSecond.containsKey(newStr[1])) { // если такой лист уже инициализировался
+			hashmapSecond.get(newStr[1]).add(lastLineNumber);	
+		}
+		else {
+			ArrayList <Integer> value = new ArrayList <Integer>();
+			value.add(lastLineNumber);
+			hashmapSecond.put(newStr[1], value);
+		}		
+		
+		lastLineNumber++; // "pointer" on last line
+		
+		// Occupy space with "_"
 		for (int i = 0; i < newStr.length; i++) {
 			newStr[i] = occupySpace(newStr[i], fieldsLength[i]);
 		}
@@ -171,9 +192,21 @@ public class DB {
 		return false;
 	}
 
-	public boolean delete(String key) {
+	public boolean delete(String key) throws Exception {
 		if (hashmap.containsKey(key)) {
-			hashmap.remove(key);
+			Integer lineNumber = hashmap.get(key);
+
+			String[] line = get(key);
+			
+			// по номеру строки! (не по индексу)
+			hashmapSecond.get(line[1]).remove(lineNumber);	// delete basket from 2nd hashmap
+			
+			if(hashmapSecond.get(line[1]).isEmpty()) { // delete mapping if ArrayList is empty
+				hashmapSecond.remove(line[1]);
+			}
+			
+			hashmap.remove(key); // now delete basket from 1st hashmap
+				
 			return true;
 		}
 		return false;
@@ -186,16 +219,23 @@ public class DB {
 		return newStr;
 	}
 
-	// TODO implement sync of hashmaps!
-	public boolean delete(Integer key) {
+	public boolean deleteBySecondField(String key) {
 		if (hashmapSecond.containsKey(key)) {
+			
+			ArrayList <Integer> keys = hashmapSecond.get(key);
+			for (int i = 0; i < keys.size(); i++) { //TODO ACTUNG! Сделать быстрее?
+				//hashmap.values().removeAll(Collections.singleton(keys));
+				
+				hashmap.values().remove(keys.get(i));
+			}
+			
 			hashmapSecond.remove(key);
 			return true;
 		}
 		return false;
 	}
 
-	public boolean edit(String key, String[] newStr) throws IOException {
+	public boolean edit(String key, String[] newStr) throws Exception {
 		if (hashmap.containsKey(key)) {
 			delete(key);
 			add(newStr);

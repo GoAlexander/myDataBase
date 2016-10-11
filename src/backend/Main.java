@@ -30,7 +30,7 @@ public class Main {
 		System.out.println();
 
 		//Product two = new Product("iPhone 6S           ", new GregorianCalendar(2016, 04, 24).getTime(), 39539.89, 7);
-		Product two = new Product("iPhone 6S", new GregorianCalendar(2016, 04, 24).getTime(), 1.0000, 1);
+		Product two = new Product("iPhone 6S", new GregorianCalendar(2016, 04, 10).getTime(), 1.0000, 1);
 		myDB.add(two.getInfo());
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
@@ -78,7 +78,15 @@ public class Main {
 		System.out.println(myDB.getHashMapSize());
 
 		System.out.println();
+		
+		System.out.println("Test of bug!");
+		str3 = myDB.get("Samsung S7");
+		for (int i = 0; i < str3.length; i++) {
+			System.out.println(str3[i]);
+		}
 
+		System.out.println();
+		
 		myDB.delete("Samsung S7");
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
@@ -93,7 +101,7 @@ public class Main {
 
 		System.out.println();
 
-		Product four = new Product("iPhone 6S", new GregorianCalendar(2016, 04, 24).getTime(), 999, 999999);
+		Product four = new Product("iPhone 6S", new GregorianCalendar(2016, 10, 10).getTime(), 999, 999999);
 		myDB.edit("iPhone 6S", four.getInfo());
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
@@ -106,6 +114,8 @@ public class Main {
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
 		System.out.println(myDB.getHashMapSecondSize());
+		System.out.println(myDB.getHashMap());
+		System.out.println(myDB.getHashMapSecond());
 
 		System.out.println();
 
@@ -114,6 +124,8 @@ public class Main {
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
 		System.out.println(myDB.getHashMapSecondSize());
+		System.out.println(myDB.getHashMap());
+		System.out.println(myDB.getHashMapSecond());
 
 		System.out.println();
 
@@ -122,17 +134,50 @@ public class Main {
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
 		System.out.println(myDB.getHashMapSecondSize());
+		System.out.println(myDB.getHashMap());
+		System.out.println(myDB.getHashMapSecond());
 
 		System.out.println();
 
-		myDB.delete(12345);
-		System.out.println("Not implemented yet!");
+		myDB.deleteBySecondField("24-05-2016");
+		System.out.println("Implemented!");
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
 		System.out.println(myDB.getHashMapSecondSize());
+		System.out.println(myDB.getHashMap());
+		System.out.println(myDB.getHashMapSecond());
+		
+		System.out.println();
+		
+		Product eight = new Product("BigPhone", new GregorianCalendar(1000, 9, 9).getTime(), 12345, 999999);
+		myDB.add(eight.getInfo());
+		System.out.println(myDB.getLineNumber());
+		System.out.println(myDB.getHashMapSize());
+		System.out.println(myDB.getHashMapSecondSize());
+		System.out.println(myDB.getHashMap());
+		System.out.println(myDB.getHashMapSecond());
 
 		System.out.println();
+		
+		Product eight2 = new Product("BigPhone2", new GregorianCalendar(1000, 9, 9).getTime(), 12345, 999999);
+		myDB.add(eight2.getInfo());
+		System.out.println(myDB.getLineNumber());
+		System.out.println(myDB.getHashMapSize());
+		System.out.println(myDB.getHashMapSecondSize());
+		System.out.println(myDB.getHashMap());
+		System.out.println(myDB.getHashMapSecond());
 
+		System.out.println();
+		
+		//myDB.delete("BigPhone");
+		myDB.deleteBySecondField("09-10-1000");
+		System.out.println(myDB.getLineNumber());
+		System.out.println(myDB.getHashMapSize());
+		System.out.println(myDB.getHashMapSecondSize());
+		System.out.println(myDB.getHashMap());
+		System.out.println(myDB.getHashMapSecond());
+
+		System.out.println();
 	}
 
 }
