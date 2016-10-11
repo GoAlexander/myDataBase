@@ -325,8 +325,7 @@ public class GUI extends JFrame {
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				try {
 					if (fileChooser.showOpenDialog(loadBackupButton) == JFileChooser.APPROVE_OPTION) {
-						// TODO where to save zips?
-						myDB.unzip("C:/db", fileChooser.getSelectedFile().toString());
+						myDB.unzip("./db_tmp", fileChooser.getSelectedFile().toString());
 						myDB.openFromFolder("C:/db");
 						theAppModel.setDataVector(myDB.getData(), columnNames);
 						
