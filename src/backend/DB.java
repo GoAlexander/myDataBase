@@ -151,7 +151,7 @@ public class DB {
 		
 		String line = raf.readLine();
 		raf.close();
-
+		
 		line = line.replace("_","");
 		object = line.split(";");
 		return object;
@@ -223,7 +223,7 @@ public class DB {
 		if (hashmapSecond.containsKey(key)) {
 			
 			ArrayList <Integer> keys = hashmapSecond.get(key);
-			for (int i = 0; i < keys.size(); i++) { //TODO ACTUNG! Сделать быстрее?
+			for (int i = 0; i < keys.size(); i++) { //TODO ACHTUNG!
 				//hashmap.values().removeAll(Collections.singleton(keys));
 				
 				hashmap.values().remove(keys.get(i));
@@ -289,18 +289,17 @@ public class DB {
 	public void writeToFolder(String folder) throws IOException {
 		// write db.csv
 		File currentFile = new File(folder + "/db.csv");
-		if (currentFile.exists())
-			currentFile.delete();
-		currentFile.createNewFile();
-		FileInputStream is = new FileInputStream(new File(path));
-		FileOutputStream os = new FileOutputStream(currentFile);
-		byte[] buffer = new byte[1024];
-		int length;
-		while ((length = is.read(buffer)) > 0) {
-			os.write(buffer, 0, length);
+		if (!folder.equals(this.folder)) {
+			FileInputStream is = new FileInputStream(new File(path));
+			FileOutputStream os = new FileOutputStream(currentFile);
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = is.read(buffer)) > 0) {
+				os.write(buffer, 0, length);
+			}
+			is.close();
+			os.close();
 		}
-		is.close();
-		os.close();
 
 		// write hashmap.hm
 		write(folder + "/hashmap.hm", hashmap);

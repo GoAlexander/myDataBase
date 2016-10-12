@@ -154,7 +154,7 @@ public class GUI extends JFrame {
 					@Override
 					public void windowClosed(WindowEvent e) {
 						String name = nameWindow.getSelectedName();
-						if (name != null) {
+						if (!name.isEmpty()) {
 							try {
 								if (myDB.get(name) == null)
 									JOptionPane.showMessageDialog(null, "The name " + name + " doesn`t exit!");
@@ -184,6 +184,15 @@ public class GUI extends JFrame {
 					public void windowClosed(WindowEvent e) {
 						String date = dateWindow.getSelectedDate();
 						if (!date.isEmpty()) {
+							try {
+								if (myDB.getBySecondField(date) == null)
+									JOptionPane.showMessageDialog(null, "The date " + date + " doesn`t exit!");
+								else {
+									theAppModel.setDataVector(myDB.getBySecondField(date), columnNames);
+								}
+							} catch (Exception e1) {
+								JOptionPane.showMessageDialog(null, "Search error");
+							}
 
 						}
 					}
@@ -201,7 +210,7 @@ public class GUI extends JFrame {
 					@Override
 					public void windowClosed(WindowEvent e) {
 						String name = nameWindow.getSelectedName();
-						if (name != null) {
+						if (!name.isEmpty()) {
 							try {
 								if (myDB.delete(name) == false)
 									JOptionPane.showMessageDialog(null, "The name " + name + " doesn`t exit!");
@@ -229,7 +238,14 @@ public class GUI extends JFrame {
 					public void windowClosed(WindowEvent e) {
 						String date = dateWindow.getSelectedDate();
 						if (!date.isEmpty()) {
-
+							try {
+								if (myDB.deleteBySecondField(date) == false)
+									JOptionPane.showMessageDialog(null, "The date " + date + " doesn`t exit!");
+								else
+									theAppModel.setDataVector(myDB.getData(), columnNames);
+							} catch (Exception e1) {
+								JOptionPane.showMessageDialog(null, "Delete error");
+							}
 						}
 					}
 				});
@@ -252,8 +268,11 @@ public class GUI extends JFrame {
 							try {
 								if (!myDB.add(newProduct))
 									JOptionPane.showMessageDialog(null, "Addition error");
-								else
+								else {
+									System.out.println(myDB.getHashMap());
+									System.out.println(myDB.getHashMapSecond());
 									theAppModel.setDataVector(myDB.getData(), columnNames);
+								}
 							} catch (Exception e1) {
 								JOptionPane.showMessageDialog(null, "Insert error");
 							}
@@ -328,7 +347,7 @@ public class GUI extends JFrame {
 						myDB.unzip("./db_tmp", fileChooser.getSelectedFile().toString());
 						myDB.openFromFolder("C:/db");
 						theAppModel.setDataVector(myDB.getData(), columnNames);
-						
+
 					}
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, "Can`t load this backup");
@@ -379,7 +398,11 @@ public class GUI extends JFrame {
 				int reply = JOptionPane.showConfirmDialog(null, "Save changes before you exit?", "Exit",
 						JOptionPane.YES_NO_CANCEL_OPTION);
 				if (reply == JOptionPane.YES_OPTION) {
-					btnSaveDatabase.doClick();
+					try {
+						myDB.writeToFolder(myDB.getFolder());
+					} catch (IOException e1) {
+						JOptionPane.showMessageDialog(null, "Can`t save this database");
+					}
 					System.exit(0);
 				}
 				if (reply == JOptionPane.CANCEL_OPTION) {

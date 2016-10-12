@@ -1,5 +1,6 @@
 package backend;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Random;
@@ -7,15 +8,6 @@ import java.util.Random;
 import product.Product;
 
 public class ProductGenerator {
-
-	public static void main(String[] args) throws Exception {
-
-		int size = 100;
-		ProductGenerator pg = new ProductGenerator();
-		Product[] arr = pg.createProductArray(size);
-		for (int i = 0; i < size; i++)
-			System.out.println(arr[i].toString());
-	}
 
 	public Product[] createProductArray(int size) {
 		Product[] arr = new Product[size];
@@ -51,8 +43,11 @@ public class ProductGenerator {
 	private double[] createDoubleArray(int size) {
 		Random rnd = new Random();
 		double[] arr = new double[size];
-		for (int i = 0; i < arr.length; i++)
-			arr[i] = rnd.nextDouble() * 100000;
+		for (int i = 0; i < arr.length; i++) {
+			BigDecimal x = new BigDecimal(rnd.nextDouble() * 100000);
+			x = x.setScale(4, BigDecimal.ROUND_HALF_UP);
+			arr[i] = x.doubleValue();
+		}
 		return arr;
 	}
 

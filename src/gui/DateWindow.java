@@ -11,8 +11,6 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.awt.event.ActionEvent;
 
 public class DateWindow extends JFrame {
@@ -22,8 +20,7 @@ public class DateWindow extends JFrame {
 	private JLabel lblDate;
 	private JTextField textDateField;
 	private JButton btnOk;
-	private String date = new String("");
-	private DateFormat dateFormat = new SimpleDateFormat("dd-MM-y");
+	private String date;
 
 	public String getSelectedDate() {
 		return date;
@@ -65,7 +62,7 @@ public class DateWindow extends JFrame {
 					JOptionPane.showMessageDialog(null, "Wrong format!");
 					return;
 				} else {
-					date = dateFormat.format(s);
+					date = new String(s);
 					dispose();
 				}
 			}
