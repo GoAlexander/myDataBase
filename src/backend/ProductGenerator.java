@@ -16,7 +16,7 @@ public class ProductGenerator {
 		double[] arr3 = createDoubleArray(size);
 		int[] arr4 = createNumericArray(size);
 		for (int i = 0; i < size; i++)
-			arr[i] = new Product(arr1[i], arr2[i], arr3[i], arr4[i]);
+			arr[i] = new Product(arr1[i], new GregorianCalendar(2016, 11, 20).getTime(), arr3[i], arr4[i]);
 		return arr;
 	}
 
