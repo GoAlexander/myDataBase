@@ -15,7 +15,7 @@ public class ProductGenerator {
 		Date[] arr2 = createDateArray(size);
 		double[] arr3 = createDoubleArray(size);
 		int[] arr4 = createNumericArray(size);
-		for (int i = 0; i < arr.length; i++)
+		for (int i = 0; i < size; i++)
 			arr[i] = new Product(arr1[i], arr2[i], arr3[i], arr4[i]);
 		return arr;
 	}
@@ -55,7 +55,7 @@ public class ProductGenerator {
 		String symbols = "abcdefghijklmnopqrstuvwxyz";
 		int count;
 		String[] arr = new String[size];
-		for (int i = 0; i < arr.length; i++) {
+		for (int i = 0; i < size; i++) {
 			StringBuilder randString = new StringBuilder();
 			count = (int) (Math.random() * 10);
 			for (int j = 0; j < count; j++)

@@ -1,16 +1,12 @@
 package backend;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.LineNumberReader;
 import java.util.GregorianCalendar;
 
 import product.Product;
 
 public class Timer {
-	
+
 	private static long ariphmetic_Average(long[] time_results, int number_of_tries) {
 		int count = 0;
 		long result = 0;
@@ -25,7 +21,7 @@ public class Timer {
 
 	public static void main(String[] args) {
 
-		int size = 10000;
+		int size = 12000;
 		ProductGenerator pg = new ProductGenerator();
 		DB myDB = new DB();
 		myDB.setPath("./db.csv");
@@ -63,7 +59,7 @@ public class Timer {
 		System.out.println("Addition result (one operation): " + add_result + "ms");
 		System.out.println("Addition result (" + size + " operations): " + add2_result + "ms");
 
-		Product one = new Product("iPhone 5S", new GregorianCalendar(2016, 12, 31).getTime(), 12.0000, 123);
+		Product one = new Product("iPhone 5S", new GregorianCalendar(2014, 11, 28).getTime(), 12.0000, 123);
 		try {
 			myDB.add(one.getInfo());
 		} catch (IOException e) {
@@ -77,7 +73,7 @@ public class Timer {
 			e.printStackTrace();
 		}
 		long find_result = myDB.timerStop();
-		
+
 		myDB.timerStart();
 		try {
 			myDB.oldGet("iPhone 5S");
@@ -100,7 +96,9 @@ public class Timer {
 		System.out.println("Delete by name result: " + delete_result + "ms");
 
 		Product two = new Product("iPhone 6S", new GregorianCalendar(2016, 11, 20).getTime(), 134.0000, 156);
+		Product three = new Product("iPhone 7S", new GregorianCalendar(2016, 11, 20).getTime(), 134.0000, 156);
 		try {
+			myDB.add(three.getInfo());
 			myDB.add(two.getInfo());
 			myDB.add(one.getInfo());
 		} catch (IOException e) {
@@ -115,7 +113,7 @@ public class Timer {
 		}
 		long find_result2 = myDB.timerStop();
 
-		System.out.println("Find by date result: " + find_result2 + "ms");
+		System.out.println("Find by date result (2 elems): " + find_result2 + "ms");
 
 		myDB.timerStart();
 		try {
@@ -125,7 +123,7 @@ public class Timer {
 		}
 		long delete_result2 = myDB.timerStop();
 
-		System.out.println("Delete by date result: " + delete_result2 + "ms");
+		System.out.println("Delete by date result (2 elems): " + delete_result2 + "ms");
 
 	}
 

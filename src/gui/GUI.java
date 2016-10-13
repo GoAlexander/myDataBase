@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import backend.DB;
+import backend.ExcelWorker;
+
 import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -27,7 +29,7 @@ public class GUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JButton insertButton, deleteByNameButton, findByNameButton, btnSaveDatabase, btnLoadDatabase,
 			btnDeleteDatabase, editButton, deleteByDateButton, findByDateButton, btnNewDatabase, createBackupButton,
-			loadBackupButton;
+			loadBackupButton, createExcelButton;
 	private DB myDB = new DB();
 	private final int columns = 4;
 	private String[] columnNames = { "Name", "Order date", "Price (roubles)", "Quantity" };
@@ -389,6 +391,29 @@ public class GUI extends JFrame {
 			}
 		});
 
+		createExcelButton = new JButton("Import to .xls");
+		createExcelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setCurrentDirectory(new java.io.File("."));
+				chooser.setDialogTitle("Select destination");
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				chooser.setAcceptAllFileFilterUsed(false);
+
+				if (chooser.showSaveDialog(createExcelButton) == JFileChooser.APPROVE_OPTION) {
+					String folder = chooser.getSelectedFile().toString();
+					try {
+						ExcelWorker tmp = new ExcelWorker();
+						tmp.importToExcel(folder, myDB.getData());
+						return;
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(null, "Can`t create .xls for this database");
+						return;
+					}
+				}
+			}
+		});
+
 		JPanel panel2 = new JPanel();
 		panel2.setLayout(new GridLayout(0, 6, 1, 0));
 		panel2.add(insertButton);
@@ -399,9 +424,10 @@ public class GUI extends JFrame {
 		panel2.add(findByDateButton);
 
 		JPanel panel5 = new JPanel();
-		panel5.setLayout(new GridLayout(0, 2, 1, 0));
+		panel5.setLayout(new GridLayout(0, 3, 1, 0));
 		panel5.add(createBackupButton);
 		panel5.add(loadBackupButton);
+		panel5.add(createExcelButton);
 
 		JPanel panel4 = new JPanel();
 		contentPane.add(panel4, BorderLayout.SOUTH);
@@ -420,7 +446,6 @@ public class GUI extends JFrame {
 		return null;
 	}
 
-	
 	public GUI() {
 
 		setTitle("Product database");
