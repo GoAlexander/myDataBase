@@ -29,7 +29,7 @@ public class GUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JButton insertButton, deleteByNameButton, findByNameButton, btnSaveDatabase, btnLoadDatabase,
 			btnDeleteDatabase, editButton, deleteByDateButton, findByDateButton, btnNewDatabase, createBackupButton,
-			loadBackupButton, createExcelButton;
+			loadBackupButton, createExcelButton, btnEndSearch;
 	private DB myDB = new DB();
 	private final int columns = 4;
 	private String[] columnNames = { "Name", "Order date", "Price (roubles)", "Quantity" };
@@ -414,6 +414,18 @@ public class GUI extends JFrame {
 			}
 		});
 
+		btnEndSearch = new JButton("End search");
+		btnEndSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					theAppModel.setDataVector(myDB.getData(), columnNames);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "File error!");
+					return;
+				}
+			}
+		});
+
 		JPanel panel2 = new JPanel();
 		panel2.setLayout(new GridLayout(0, 6, 1, 0));
 		panel2.add(insertButton);
@@ -424,10 +436,11 @@ public class GUI extends JFrame {
 		panel2.add(findByDateButton);
 
 		JPanel panel5 = new JPanel();
-		panel5.setLayout(new GridLayout(0, 3, 1, 0));
+		panel5.setLayout(new GridLayout(0, 4, 1, 0));
 		panel5.add(createBackupButton);
 		panel5.add(loadBackupButton);
 		panel5.add(createExcelButton);
+		panel5.add(btnEndSearch);
 
 		JPanel panel4 = new JPanel();
 		contentPane.add(panel4, BorderLayout.SOUTH);
