@@ -22,28 +22,25 @@ public class Timer {
 	public static void main(String[] args) {
 
 		int size = 12000;
+		long[] time_results = new long[size];
 		ProductGenerator pg = new ProductGenerator();
 		DB myDB = new DB();
 		myDB.setPath("./db.csv");
 		myDB.setLastLineNumber(1);
-		long[] time_results = new long[size];
 
 		Product[] arr = pg.createProductArray(size);
 		for (int i = 0; i < size; i++)
 			System.out.println(arr[i].toString());
 
-		for (int tries = 0; tries < size; tries++) {
-			myDB.timerStart();
-			try {
-				myDB.add(arr[tries].getInfo());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			time_results[tries] = myDB.timerStop();
-		}
-		long add_result = ariphmetic_Average(time_results, size);
+		/*
+		 * long[] time_results = new long[size]; for (int tries = 0; tries <
+		 * size; tries++) { myDB.timerStart(); try {
+		 * myDB.add(arr[tries].getInfo()); } catch (IOException e) {
+		 * e.printStackTrace(); } time_results[tries] = myDB.timerStop(); } long
+		 * add_result = ariphmetic_Average(time_results, size);
+		 */
 
-		long add2_result = 0;
+		long add_result = 0;
 		myDB.timerStart();
 		for (int tries = 0; tries < size; tries++) {
 			try {
@@ -51,13 +48,14 @@ public class Timer {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			add2_result = myDB.timerStop();
+			add_result = myDB.timerStop();
 		}
 
 		System.out.println();
 		System.out.println("Size of database is " + size);
-		System.out.println("Addition result (one operation): " + add_result + "ms");
-		System.out.println("Addition result (" + size + " operations): " + add2_result + "ms");
+		// System.out.println("Addition result (one operation): " + add_result +
+		// "ms");
+		System.out.println("Addition result (" + size + " operations): " + add_result + "ms");
 
 		Product one = new Product("iPhone 5S", new GregorianCalendar(2014, 11, 28).getTime(), 12.0000, 123);
 		try {
@@ -66,21 +64,28 @@ public class Timer {
 			e.printStackTrace();
 		}
 
-		myDB.timerStart();
-		try {
-			myDB.get("iPhone 5S");
-		} catch (Exception e) {
-			e.printStackTrace();
+		for (int tries = 0; tries < size; tries++) {
+			myDB.timerStart();
+			try {
+				myDB.get("iPhone 5S");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			time_results[tries] = myDB.timerStop();
 		}
-		long find_result = myDB.timerStop();
+		long find_result = ariphmetic_Average(time_results, size);
 
-		myDB.timerStart();
-		try {
-			myDB.oldGet("iPhone 5S");
-		} catch (Exception e) {
-			e.printStackTrace();
+		for (int tries = 0; tries < size; tries++) {
+			myDB.timerStart();
+			try {
+				myDB.oldGet("iPhone 5S");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			time_results[tries] = myDB.timerStop();
 		}
-		long find_old_result = myDB.timerStop();
+		long find_old_result = ariphmetic_Average(time_results, size);
+
 
 		System.out.println("Find by name result: " + find_result + "ms");
 		System.out.println("Find by name old result (without seek): " + find_old_result + "ms");
@@ -105,13 +110,16 @@ public class Timer {
 			e.printStackTrace();
 		}
 
-		myDB.timerStart();
-		try {
-			myDB.getBySecondField("20-12-2016");
-		} catch (Exception e) {
-			e.printStackTrace();
+		for (int tries = 0; tries < size; tries++) {
+			myDB.timerStart();
+			try {
+				myDB.getBySecondField("20-12-2016");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			time_results[tries] = myDB.timerStop();
 		}
-		long find_result2 = myDB.timerStop();
+		long find_result2 = ariphmetic_Average(time_results, size);
 
 		System.out.println("Find by date result (2 elems): " + find_result2 + "ms");
 
