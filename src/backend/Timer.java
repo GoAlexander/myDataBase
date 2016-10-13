@@ -17,7 +17,7 @@ public class Timer {
 	public static void main(String[] args) {
 
 		int size = 12000;
-		long[] time_results = new long[size];
+		//long[] time_results = new long[size];
 		ProductGenerator pg = new ProductGenerator();
 		DB myDB = new DB();
 		myDB.setPath("./db.csv");
