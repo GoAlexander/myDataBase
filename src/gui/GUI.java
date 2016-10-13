@@ -70,6 +70,14 @@ public class GUI extends JFrame {
 							return;
 						}
 					}
+					if (myDB.getFolder() != null) {
+						try {
+							myDB.writeToFolder(myDB.getFolder());
+						} catch (IOException e1) {
+							JOptionPane.showMessageDialog(null, "Save error");
+							return;
+						}
+					}
 					myDB.setFolder(folder);
 					theAppModel.setDataVector(null, columnNames);
 				}
@@ -108,6 +116,14 @@ public class GUI extends JFrame {
 				fileChooser.setAcceptAllFileFilterUsed(false);
 				try {
 					if (fileChooser.showOpenDialog(btnLoadDatabase) == JFileChooser.APPROVE_OPTION) {
+						if (myDB.getFolder() != null) {
+							try {
+								myDB.writeToFolder(myDB.getFolder());
+							} catch (IOException e1) {
+								JOptionPane.showMessageDialog(null, "Save error");
+								return;
+							}
+						}
 						myDB.openFromFolder(fileChooser.getSelectedFile().toString());
 						theAppModel.setDataVector(myDB.getData(), columnNames);
 					}
@@ -136,6 +152,7 @@ public class GUI extends JFrame {
 						} else {
 							file.delete();
 						}
+						theAppModel.setRowCount(0);
 						JOptionPane.showMessageDialog(null, "Deletion successful");
 						myDB.setFolder(null);
 					} catch (Exception e) {
@@ -353,6 +370,14 @@ public class GUI extends JFrame {
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				try {
 					if (fileChooser.showOpenDialog(loadBackupButton) == JFileChooser.APPROVE_OPTION) {
+						if (myDB.getFolder() != null) {
+							try {
+								myDB.writeToFolder(myDB.getFolder());
+							} catch (IOException e1) {
+								JOptionPane.showMessageDialog(null, "Save error");
+								return;
+							}
+						}
 						myDB.unzip("./db_tmp", fileChooser.getSelectedFile().toString());
 						myDB.openFromFolder("./db_tmp");
 						theAppModel.setDataVector(myDB.getData(), columnNames);
@@ -395,6 +420,7 @@ public class GUI extends JFrame {
 		return null;
 	}
 
+	
 	public GUI() {
 
 		setTitle("Product database");

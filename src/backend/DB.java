@@ -1,11 +1,14 @@
 package backend;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.LineNumberReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
@@ -170,6 +173,28 @@ public class DB {
 		raf.close();
 
 		line = line.replace("_", "");
+		object = line.split(";");
+		return object;
+	}
+	
+	// for tests without seek
+	public String[] oldGet(String key) throws Exception {
+		return oldGetInfo(hashmap.get(key));
+	}
+	
+	private String[] oldGetInfo(int lineNumber) throws Exception {
+		File file = new File(path);
+		String[] object;
+
+		BufferedReader in = new BufferedReader(new FileReader(file.getAbsoluteFile()));
+		LineNumberReader lnr =  new LineNumberReader(in);
+		
+		String line = new String();
+		for (int i = 0; i < lineNumber; i++)
+			line = lnr.readLine();
+		in.close();
+		lnr.close();
+		
 		object = line.split(";");
 		return object;
 	}

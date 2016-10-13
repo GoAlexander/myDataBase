@@ -1,12 +1,16 @@
 package backend;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.LineNumberReader;
 import java.util.GregorianCalendar;
 
 import product.Product;
 
 public class Timer {
-
+	
 	private static long ariphmetic_Average(long[] time_results, int number_of_tries) {
 		int count = 0;
 		long result = 0;
@@ -72,9 +76,18 @@ public class Timer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		long add3_result = myDB.timerStop();
+		long find_result = myDB.timerStop();
+		
+		myDB.timerStart();
+		try {
+			myDB.oldGet("iPhone 5S");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		long find_old_result = myDB.timerStop();
 
-		System.out.println("Find by name result: " + add3_result + "ms");
+		System.out.println("Find by name result: " + find_result + "ms");
+		System.out.println("Find by name old result (without seek): " + find_old_result + "ms");
 
 		myDB.timerStart();
 		try {
@@ -82,9 +95,9 @@ public class Timer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		long add4_result = myDB.timerStop();
+		long delete_result = myDB.timerStop();
 
-		System.out.println("Delete by name result: " + add4_result + "ms");
+		System.out.println("Delete by name result: " + delete_result + "ms");
 
 		Product two = new Product("iPhone 6S", new GregorianCalendar(2016, 11, 20).getTime(), 134.0000, 156);
 		try {
@@ -100,9 +113,9 @@ public class Timer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		long add5_result = myDB.timerStop();
+		long find_result2 = myDB.timerStop();
 
-		System.out.println("Find by date result: " + add5_result + "ms");
+		System.out.println("Find by date result: " + find_result2 + "ms");
 
 		myDB.timerStart();
 		try {
@@ -110,9 +123,9 @@ public class Timer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		long add6_result = myDB.timerStop();
+		long delete_result2 = myDB.timerStop();
 
-		System.out.println("Delete by date result: " + add6_result + "ms");
+		System.out.println("Delete by date result: " + delete_result2 + "ms");
 
 	}
 
