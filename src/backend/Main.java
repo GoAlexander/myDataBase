@@ -5,22 +5,16 @@ import java.util.GregorianCalendar;
 import product.Product;
 
 public class Main {
-	
+
 	public static void main(String[] args) throws Exception {
 
-
 		DB myDB = new DB();
-		/*
-		 * myDB.zip(new File("C:/Users/aserg/Documents/new").toPath(), new
-		 * File("C:/Users/aserg/Documents/test.backup").toPath());
-		 * myDB.unzip("C:/Users/aserg/Documents/test",
-		 * "C:/Users/aserg/Documents/test.backup");
-		 */
 
 		myDB.setPath("./db.csv");
 		myDB.setLastLineNumber(1);
 
-		//Product one = new Product("iPhone 5S           ", new GregorianCalendar(2016, 12, 31).getTime(), 52989, 12);
+		// Product one = new Product("iPhone 5S ", new GregorianCalendar(2016,
+		// 12, 31).getTime(), 52989, 12);
 		Product one = new Product("iPhone 5S", new GregorianCalendar(2016, 12, 31).getTime(), 12.0000, 123);
 		myDB.add(one.getInfo());
 		System.out.println(myDB.getLineNumber());
@@ -28,24 +22,25 @@ public class Main {
 
 		System.out.println();
 
-		//Product two = new Product("iPhone 6S           ", new GregorianCalendar(2016, 04, 24).getTime(), 39539.89, 7);
+		// Product two = new Product("iPhone 6S ", new GregorianCalendar(2016,
+		// 04, 24).getTime(), 39539.89, 7);
 		Product two = new Product("iPhone 6S", new GregorianCalendar(2016, 04, 10).getTime(), 1.0000, 1);
 		myDB.add(two.getInfo());
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
 
-		System.out.println();		
+		System.out.println();
 
 		String[] str3 = myDB.get("iPhone 6S");
 		for (int i = 0; i < str3.length; i++) {
 			System.out.println(str3[i]);
 		}
-		
+
 		str3 = myDB.get("iPhone 5S");
 		for (int i = 0; i < str3.length; i++) {
 			System.out.println(str3[i]);
 		}
-		
+
 		str3 = myDB.get("iPhone 6S");
 		for (int i = 0; i < str3.length; i++) {
 			System.out.println(str3[i]);
@@ -77,7 +72,7 @@ public class Main {
 		System.out.println(myDB.getHashMapSize());
 
 		System.out.println();
-		
+
 		System.out.println("Test of bug!");
 		str3 = myDB.get("Samsung S7");
 		for (int i = 0; i < str3.length; i++) {
@@ -85,7 +80,7 @@ public class Main {
 		}
 
 		System.out.println();
-		
+
 		myDB.delete("Samsung S7");
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
@@ -145,9 +140,9 @@ public class Main {
 		System.out.println(myDB.getHashMapSecondSize());
 		System.out.println(myDB.getHashMap());
 		System.out.println(myDB.getHashMapSecond());
-		
+
 		System.out.println();
-		
+
 		Product eight = new Product("BigPhone", new GregorianCalendar(1000, 9, 9).getTime(), 12345, 999999);
 		myDB.add(eight.getInfo());
 		System.out.println(myDB.getLineNumber());
@@ -157,7 +152,7 @@ public class Main {
 		System.out.println(myDB.getHashMapSecond());
 
 		System.out.println();
-		
+
 		Product eight2 = new Product("BigPhone2", new GregorianCalendar(1000, 9, 9).getTime(), 12345, 999999);
 		myDB.add(eight2.getInfo());
 		System.out.println(myDB.getLineNumber());
@@ -167,8 +162,8 @@ public class Main {
 		System.out.println(myDB.getHashMapSecond());
 
 		System.out.println();
-		
-		//myDB.delete("BigPhone");
+
+		// myDB.delete("BigPhone");
 		myDB.deleteBySecondField("09-10-1000");
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
@@ -177,6 +172,11 @@ public class Main {
 		System.out.println(myDB.getHashMapSecond());
 
 		System.out.println();
+
+		/*
+		 * ExcelWorker tmp = new ExcelWorker(); tmp.importToExcel(".",
+		 * myDB.getData());
+		 */
 	}
 
 }
