@@ -146,13 +146,9 @@ public class DB {
 
 		RandomAccessFile raf = new RandomAccessFile(file.getAbsoluteFile(), "r");
 
-		String osType = System.getProperty("os.name").toLowerCase(); // TODO
-																		// REWRITE
-																		// IT!
-																		// )))
+		String osType = System.getProperty("os.name").toLowerCase(); // TODO REWRITE IT! )))
 		if (osType.indexOf("nix") >= 0 || osType.indexOf("nux") >= 0 || osType.indexOf("aix") > 0) {
-			if ((lineNumber - 1) == 0) { // TODO Highly important! Test with
-											// first, middle and end lines!!!
+			if ((lineNumber - 1) == 0) {
 				raf.seek(0);
 			} else {
 				raf.seek((50 * (lineNumber - 1)) + (lineNumber - 1));
@@ -160,9 +156,7 @@ public class DB {
 		}
 
 		if (osType.indexOf("win") >= 0) {
-
-			if ((lineNumber - 1) == 0) { // TODO Highly important! Test with
-											// first, middle and end lines!!!
+			if ((lineNumber - 1) == 0) {
 				raf.seek(0);
 			} else {
 				raf.seek((50 * (lineNumber - 1)) + ((lineNumber - 1) * 2));
