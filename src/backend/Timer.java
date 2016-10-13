@@ -54,6 +54,7 @@ public class Timer {
 			add2_result = myDB.timerStop();
 		}
 
+		System.out.println();
 		System.out.println("Size of database is " + size);
 		System.out.println("Addition result (one operation): " + add_result + "ms");
 		System.out.println("Addition result (" + size + " operations): " + add2_result + "ms");
@@ -67,10 +68,7 @@ public class Timer {
 
 		myDB.timerStart();
 		try {
-			String[] str3 = myDB.get("iPhone 5S");
-			for (int i = 0; i < str3.length; i++) {
-				System.out.println(str3[i]);
-			}
+			myDB.get("iPhone 5S");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -88,16 +86,17 @@ public class Timer {
 
 		System.out.println("Delete by name result: " + add4_result + "ms");
 
-		Product two = new Product("iPhone 6S", new GregorianCalendar(2016, 12, 31).getTime(), 134.0000, 156);
+		Product two = new Product("iPhone 6S", new GregorianCalendar(2016, 11, 20).getTime(), 134.0000, 156);
 		try {
 			myDB.add(two.getInfo());
+			myDB.add(one.getInfo());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		myDB.timerStart();
 		try {
-			myDB.getBySecondField("31-01-2016");
+			myDB.getBySecondField("20-12-2016");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -107,7 +106,7 @@ public class Timer {
 
 		myDB.timerStart();
 		try {
-			myDB.deleteBySecondField("31-01-2016");
+			myDB.deleteBySecondField("20-12-2016");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

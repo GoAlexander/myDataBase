@@ -76,6 +76,10 @@ public class Main {
 		myDB.add(three.getInfo());
 		System.out.println(myDB.getLineNumber());
 		System.out.println(myDB.getHashMapSize());
+		
+		System.out.println();
+		
+		myDB.test();
 
 		System.out.println();
 		

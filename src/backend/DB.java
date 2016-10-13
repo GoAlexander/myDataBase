@@ -142,12 +142,26 @@ public class DB {
 		
 		RandomAccessFile raf = new RandomAccessFile(file.getAbsoluteFile(), "r");
 		
-		if ((lineNumber-1) == 0) { //TODO Highly important! Test with first, middle and end lines!!!
-			raf.seek( 0 );
+		String osType = System.getProperty("os.name").toLowerCase(); //TODO REWRITE IT! )))
+		if(osType.indexOf("nix") >= 0 || osType.indexOf("nux") >= 0 || osType.indexOf("aix") > 0 ) {
+			if ((lineNumber-1) == 0) { //TODO Highly important! Test with first, middle and end lines!!!
+				raf.seek( 0 );
+			}
+			else {
+				raf.seek( (50*(lineNumber-1)) + (lineNumber-1) );
+			}
 		}
-		else {
-			raf.seek( (50*(lineNumber-1)) + (lineNumber-1) );
-		}
+		
+		if(osType.indexOf("win") >= 0) {
+			
+			if ((lineNumber-1) == 0) { //TODO Highly important! Test with first, middle and end lines!!!
+				raf.seek( 0 );
+			}
+			else {
+				raf.seek( (50*(lineNumber-1)) + ((lineNumber-1)*2) );
+			}
+		} 
+		
 		
 		String line = raf.readLine();
 		raf.close();
@@ -397,6 +411,39 @@ public class DB {
 		zipInput.close();
 		fInput.close();
 
+	}
+	
+	public void test() throws Exception {
+		File file = new File(path);
+		
+		RandomAccessFile raf = new RandomAccessFile(file.getAbsoluteFile(), "r");
+		
+		raf.seek( 0 );
+		String line = raf.readLine();
+		System.out.println("line = " + line);
+		
+		raf.seek( 49 );
+		line = raf.readLine();
+		System.out.println("line = " + line);
+		
+		raf.seek( 50 );
+		line = raf.readLine();
+		System.out.println("line = " + line);
+		
+		raf.seek( 51 );
+		line = raf.readLine();
+		System.out.println("line = " + line);
+		
+		raf.seek( 52 ); //working
+		line = raf.readLine();
+		System.out.println("line = " + line);
+		
+		raf.seek( 104 ); //working
+		line = raf.readLine();
+		System.out.println("line = " +  line);
+		
+		raf.close();
+		
 	}
 	
 }
