@@ -7,6 +7,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -27,6 +29,7 @@ public class GUI extends JFrame {
 			btnDeleteDatabase, editButton, deleteByDateButton, findByDateButton, btnNewDatabase, createBackupButton,
 			loadBackupButton;
 	private DB myDB = new DB();
+	private final int columns = 4;
 	private String[] columnNames = { "Name", "Order date", "Price (roubles)", "Quantity" };
 
 	private Component buildGUI() {
@@ -154,7 +157,7 @@ public class GUI extends JFrame {
 					@Override
 					public void windowClosed(WindowEvent e) {
 						String name = nameWindow.getSelectedName();
-						if (!name.isEmpty()) {
+						if (name != null) {
 							try {
 								if (myDB.get(name) == null)
 									JOptionPane.showMessageDialog(null, "The name " + name + " doesn`t exit!");
@@ -183,12 +186,16 @@ public class GUI extends JFrame {
 					@Override
 					public void windowClosed(WindowEvent e) {
 						String date = dateWindow.getSelectedDate();
-						if (!date.isEmpty()) {
+						if (date != null) {
 							try {
-								if (myDB.getBySecondField(date) == null)
+								ArrayList<String[]> data = myDB.getBySecondField(date);
+								if (data == null)
 									JOptionPane.showMessageDialog(null, "The date " + date + " doesn`t exit!");
 								else {
-									theAppModel.setDataVector(myDB.getBySecondField(date), columnNames);
+									String[][] tmp = new String[data.size()][columns];
+									for (int i = 0; i < data.size(); i++)
+										tmp[i] = data.get(i);
+									theAppModel.setDataVector(tmp, columnNames);
 								}
 							} catch (Exception e1) {
 								JOptionPane.showMessageDialog(null, "Search error");
@@ -210,7 +217,7 @@ public class GUI extends JFrame {
 					@Override
 					public void windowClosed(WindowEvent e) {
 						String name = nameWindow.getSelectedName();
-						if (!name.isEmpty()) {
+						if (name != null) {
 							try {
 								if (myDB.delete(name) == false)
 									JOptionPane.showMessageDialog(null, "The name " + name + " doesn`t exit!");
@@ -237,7 +244,7 @@ public class GUI extends JFrame {
 					@Override
 					public void windowClosed(WindowEvent e) {
 						String date = dateWindow.getSelectedDate();
-						if (!date.isEmpty()) {
+						if (date != null) {
 							try {
 								if (myDB.deleteBySecondField(date) == false)
 									JOptionPane.showMessageDialog(null, "The date " + date + " doesn`t exit!");
@@ -267,7 +274,8 @@ public class GUI extends JFrame {
 						if (!newProduct[0].equals("-1")) {
 							try {
 								if (!myDB.add(newProduct))
-									JOptionPane.showMessageDialog(null, "Addition error");
+									JOptionPane.showMessageDialog(null,
+											"The name " + newProduct[0] + " already exists!");
 								else {
 									System.out.println(myDB.getHashMap());
 									System.out.println(myDB.getHashMapSecond());
@@ -299,7 +307,8 @@ public class GUI extends JFrame {
 							if (!newProduct[0].equals("-1")) {
 								try {
 									if (myDB.edit(key, newProduct) == false)
-										JOptionPane.showMessageDialog(null, "The name " + key + " doesn`t exit!");
+										JOptionPane.showMessageDialog(null,
+												"The name " + newProduct[0] + " already exists!");
 									else
 										theAppModel.setDataVector(myDB.getData(), columnNames);
 								} catch (Exception e1) {
@@ -345,7 +354,7 @@ public class GUI extends JFrame {
 				try {
 					if (fileChooser.showOpenDialog(loadBackupButton) == JFileChooser.APPROVE_OPTION) {
 						myDB.unzip("./db_tmp", fileChooser.getSelectedFile().toString());
-						myDB.openFromFolder("C:/db");
+						myDB.openFromFolder("./db_tmp");
 						theAppModel.setDataVector(myDB.getData(), columnNames);
 
 					}

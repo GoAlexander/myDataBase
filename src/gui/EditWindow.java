@@ -7,7 +7,6 @@ public class EditWindow extends InsertWindow {
 	public EditWindow(String[] info) {
 		super();
 		lblAddNewProduct.setText("Edit this product:");
-		tfName.setEditable(false);
 		tfName.setText(info[0]);
 		tfDate.setText(info[1]);
 		tfPrice.setText(info[2]);

@@ -34,9 +34,9 @@ public class DB {
 	long timeStop;
 
 	private final int columns = 4; // TODO ACHTUNG!!!
-	
+
 	// name, date, price, quantity lengths
-	private final int[] fieldsLength = {20, 10, 10, 7}; // TODO ACHTUNG!!!
+	private final int[] fieldsLength = { 20, 10, 10, 7 }; // TODO ACHTUNG!!!
 
 	Map<String, Integer> hashmap = new HashMap<String, Integer>();
 	Map<String, ArrayList<Integer>> hashmapSecond = new HashMap<String, ArrayList<Integer>>();
@@ -112,7 +112,7 @@ public class DB {
 	public Map<String, Integer> getHashMap() {
 		return hashmap;
 	}
-	
+
 	public Map<String, ArrayList<Integer>> getHashMapSecond() {
 		return hashmapSecond;
 	}
@@ -121,52 +121,55 @@ public class DB {
 	// operations with DB
 	// --------------------------------------------------
 
-	public String[][] getBySecondField(String key) throws Exception {
+	public ArrayList<String[]> getBySecondField(String key) throws Exception {
 		ArrayList<Integer> values = hashmapSecond.get(key);
 
-		String[][] data = new String[hashmapSecond.size()][columns];
+		ArrayList<String[]> data = new ArrayList<String[]>();
+		// String[][] data = new String[hashmapSecond.size()][columns];
 		for (int i = 0; i < values.size(); i++) {
-			data[i] = getInfo(values.get(i));
+			data.add(getInfo(values.get(i)));
 		}
 
 		return data;
 	}
 
 	public String[] get(String key) throws Exception {
-		return getInfo( hashmap.get(key) );
+		return getInfo(hashmap.get(key));
 	}
 
 	private String[] getInfo(int lineNumber) throws Exception {
 		File file = new File(path);
 		String[] object;
-		
+
 		RandomAccessFile raf = new RandomAccessFile(file.getAbsoluteFile(), "r");
-		
-		String osType = System.getProperty("os.name").toLowerCase(); //TODO REWRITE IT! )))
-		if(osType.indexOf("nix") >= 0 || osType.indexOf("nux") >= 0 || osType.indexOf("aix") > 0 ) {
-			if ((lineNumber-1) == 0) { //TODO Highly important! Test with first, middle and end lines!!!
-				raf.seek( 0 );
-			}
-			else {
-				raf.seek( (50*(lineNumber-1)) + (lineNumber-1) );
+
+		String osType = System.getProperty("os.name").toLowerCase(); // TODO
+																		// REWRITE
+																		// IT!
+																		// )))
+		if (osType.indexOf("nix") >= 0 || osType.indexOf("nux") >= 0 || osType.indexOf("aix") > 0) {
+			if ((lineNumber - 1) == 0) { // TODO Highly important! Test with
+											// first, middle and end lines!!!
+				raf.seek(0);
+			} else {
+				raf.seek((50 * (lineNumber - 1)) + (lineNumber - 1));
 			}
 		}
-		
-		if(osType.indexOf("win") >= 0) {
-			
-			if ((lineNumber-1) == 0) { //TODO Highly important! Test with first, middle and end lines!!!
-				raf.seek( 0 );
+
+		if (osType.indexOf("win") >= 0) {
+
+			if ((lineNumber - 1) == 0) { // TODO Highly important! Test with
+											// first, middle and end lines!!!
+				raf.seek(0);
+			} else {
+				raf.seek((50 * (lineNumber - 1)) + ((lineNumber - 1) * 2));
 			}
-			else {
-				raf.seek( (50*(lineNumber-1)) + ((lineNumber-1)*2) );
-			}
-		} 
-		
-		
+		}
+
 		String line = raf.readLine();
 		raf.close();
-		
-		line = line.replace("_","");
+
+		line = line.replace("_", "");
 		object = line.split(";");
 		return object;
 	}
@@ -176,19 +179,20 @@ public class DB {
 			return false;
 
 		hashmap.put(newStr[0], lastLineNumber); // put in 1st hashMap
-		
+
 		// put in 2nd hashMap
-		if (hashmapSecond.containsKey(newStr[1])) { // если такой лист уже инициализировался
-			hashmapSecond.get(newStr[1]).add(lastLineNumber);	
-		}
-		else {
-			ArrayList <Integer> value = new ArrayList <Integer>();
+		if (hashmapSecond.containsKey(newStr[1])) { // если такой
+													// лист уже
+													// инициализировался
+			hashmapSecond.get(newStr[1]).add(lastLineNumber);
+		} else {
+			ArrayList<Integer> value = new ArrayList<Integer>();
 			value.add(lastLineNumber);
 			hashmapSecond.put(newStr[1], value);
-		}		
-		
+		}
+
 		lastLineNumber++; // "pointer" on last line
-		
+
 		// Occupy space with "_"
 		for (int i = 0; i < newStr.length; i++) {
 			newStr[i] = occupySpace(newStr[i], fieldsLength[i]);
@@ -211,22 +215,26 @@ public class DB {
 			Integer lineNumber = hashmap.get(key);
 
 			String[] line = get(key);
-			
+
 			// по номеру строки! (не по индексу)
-			hashmapSecond.get(line[1]).remove(lineNumber);	// delete basket from 2nd hashmap
-			
-			if(hashmapSecond.get(line[1]).isEmpty()) { // delete mapping if ArrayList is empty
+			hashmapSecond.get(line[1]).remove(lineNumber); // delete basket from
+															// 2nd hashmap
+
+			if (hashmapSecond.get(line[1]).isEmpty()) { // delete mapping if
+														// ArrayList is empty
 				hashmapSecond.remove(line[1]);
 			}
-			
+
 			hashmap.remove(key); // now delete basket from 1st hashmap
-				
+
 			return true;
 		}
 		return false;
 	}
-	
-	private String occupySpace(String newStr, int length) { //TODO Rewrite? Make more abstract? 
+
+	private String occupySpace(String newStr, int length) { // TODO Rewrite?
+															// Make more
+															// abstract?
 		while (newStr.length() != length) {
 			newStr += "_";
 		}
@@ -235,14 +243,14 @@ public class DB {
 
 	public boolean deleteBySecondField(String key) {
 		if (hashmapSecond.containsKey(key)) {
-			
-			ArrayList <Integer> keys = hashmapSecond.get(key);
-			for (int i = 0; i < keys.size(); i++) { //TODO ACHTUNG!
-				//hashmap.values().removeAll(Collections.singleton(keys));
-				
+
+			ArrayList<Integer> keys = hashmapSecond.get(key);
+			for (int i = 0; i < keys.size(); i++) { // TODO ACHTUNG!
+				// hashmap.values().removeAll(Collections.singleton(keys));
+
 				hashmap.values().remove(keys.get(i));
 			}
-			
+
 			hashmapSecond.remove(key);
 			return true;
 		}
@@ -250,6 +258,9 @@ public class DB {
 	}
 
 	public boolean edit(String key, String[] newStr) throws Exception {
+		if (hashmap.containsKey(newStr[0]) && !key.equals(newStr[0])) {
+			return false;
+		}
 		if (hashmap.containsKey(key)) {
 			delete(key);
 			add(newStr);
@@ -295,7 +306,7 @@ public class DB {
 		oos.close();
 		fos.close();
 	}
-	
+
 	// --------------------------------------------------
 	// Write + open + backup
 	// --------------------------------------------------
@@ -412,38 +423,5 @@ public class DB {
 		fInput.close();
 
 	}
-	
-	public void test() throws Exception {
-		File file = new File(path);
-		
-		RandomAccessFile raf = new RandomAccessFile(file.getAbsoluteFile(), "r");
-		
-		raf.seek( 0 );
-		String line = raf.readLine();
-		System.out.println("line = " + line);
-		
-		raf.seek( 49 );
-		line = raf.readLine();
-		System.out.println("line = " + line);
-		
-		raf.seek( 50 );
-		line = raf.readLine();
-		System.out.println("line = " + line);
-		
-		raf.seek( 51 );
-		line = raf.readLine();
-		System.out.println("line = " + line);
-		
-		raf.seek( 52 ); //working
-		line = raf.readLine();
-		System.out.println("line = " + line);
-		
-		raf.seek( 104 ); //working
-		line = raf.readLine();
-		System.out.println("line = " +  line);
-		
-		raf.close();
-		
-	}
-	
+
 }
